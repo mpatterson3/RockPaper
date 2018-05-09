@@ -13,9 +13,18 @@ const PORT = process.env.PORT || 3000;
 
 const clientPath = `${__dirname}/../client`;
 
+
 app.use(express.static(clientPath));
+app.get('/game',(req,res) =>{
+    res.send("test");
+});
+
 io.on('connection',(sock)=>{
-    socke.emit('message','Hi are you connected');
+    console.log("Someone connected");
+    sock.emit('message','Hi, you are connected');
+    sock.on('message',(text)=>{
+        io.emit('message', text);
+    });
 });
 server.on('error', (err)=>{
     console.log('Server error: ',err);
